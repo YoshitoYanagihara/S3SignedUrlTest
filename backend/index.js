@@ -3,7 +3,23 @@ const express = require('express')
 const app = express()
 const server = app.listen(3000, () => {
     console.log('Start Server!')
-})
+})  
+const allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Authorization, access_token'
+    )
+
+    // intercept OPTIONS method
+    if ('OPTIONS' === req.method) {
+        res.send(200)
+    } else {
+        next()
+    }
+}
+app.use(allowCrossDomain)
 
 // AWS関係
 const AWS = require('aws-sdk')
@@ -50,7 +66,7 @@ app.get('/api/file/list', (req, res) => {
 })
 
 // アップロード
-app.post('api/file/upload', (req, res) => {
+app.post('/api/file/upload', (req, res) => {
     const response = {
         result: true,
     }
