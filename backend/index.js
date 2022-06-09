@@ -29,6 +29,11 @@ app.use(bodyParser.json())
 // AWS関係
 const AWS = require('aws-sdk')
 const secret = require('./secret.json')
+AWS.config.update({
+    accessKeyId: secret.accessKey,
+    secretAccessKey: secret.secretKey,
+    region: secret.region,
+})
 const s3 = new AWS.S3({
     apiVersion: '2006-03-01'
 })
