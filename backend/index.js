@@ -90,8 +90,18 @@ app.post('/api/file/upload', async (req, res) => {
     for (let i = 0; i < req.body.fileNum; i++) {
         const promise = new Promise((resolve, reject) => {
             const filePath = req.body.filePath + "/" + generateFileName()
-            console.log(filePath)
-            resolve()    
+            const uploadParams = {
+                Bucket: secret.bucketName,
+                Key: filePath,
+                Body: filePath,
+            }
+            s3.upload(uploadParams, (err, data) => {
+                if (err) {
+                    reject(err)
+                    return
+                }
+                resolve()
+            })
         })
         promises.push(promise)
     }
