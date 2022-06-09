@@ -64,8 +64,17 @@ app.get('/api/file/list', (req, res) => {
             return
         }
 
+        const files = {}
+        data.Contents.forEach(item => {
+            const path = item.Key.split('/')[0]
+            if (!Object.keys(files).some(p => p === path)) {
+                files[path] = []
+            }
+            files[path].push(item.Key.split('/')[1])
+        })
+
         res.json({
-            list: data.Contents,
+            list: files,
         })
     })
 })
