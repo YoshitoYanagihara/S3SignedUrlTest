@@ -135,7 +135,45 @@ app.post('/api/file/gen', (req, res) => {
         result: true,
     }
 
-    console.log(req.body)
+    const bucketParams = {
+        Bucket: secret.bucketName,
+    }
+    s3.listObjects(bucketParams, async (err, data) => {
+        if (err) {
+            console.error(err)
+            response.result = false
+            return
+        }
+        
+        const promises = []
+        data.Contents.forEach(item => {
+            if (req.body.paths.some(path => item.Key.split('/')[0] === path)) { return }
+
+            const promise = new Promise((resolve, reject) => {
+                const signedUrlParams = {
+                    Bucket: secret.bucketName,
+                    Key: item.Key,
+                    Expires: 300,
+                }
+                s3.getSignedUrl('getObject', signedUrlParams, (err2, url) => {
+                    if (err2) {
+                        reject(err2)
+                        return
+                    }
+                    console.log(url)
+                    resolve()
+                })
+            })
+            promises.push(promise)
+        })
+        
+        try {
+            await Promise.all(promises)
+        } catch (error) {
+            console.error(error)
+            response.result = false
+        }    
+    })
 
     res.json(response)
 })
