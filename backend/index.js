@@ -71,12 +71,36 @@ app.get('/api/file/list', (req, res) => {
 })
 
 // アップロード
-app.post('/api/file/upload', (req, res) => {
+app.post('/api/file/upload', async (req, res) => {
+    const generateFileName = () => {
+        const chars = 'ABCDEFGHIJKLMNOPQURSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+        let name = ''
+        for (let i = 0; i < 10; i++) {
+            const index = Math.floor(Math.random() * chars.length)
+            name += chars[index]
+        }
+        name += ".txt"
+        return name
+    }
+    
     const response = {
         result: true,
     }
+    const promises = []
+    for (let i = 0; i < req.body.fileNum; i++) {
+        const promise = new Promise((resolve, reject) => {
+            const filePath = req.body.filePath + "/" + generateFileName()
+            console.log(filePath)
+            resolve()    
+        })
+        promises.push(promise)
+    }
 
-    console.log(req.body)
-
+    try {
+        await Promise.all(promises)
+    } catch (error) {
+        console.error(error)
+        response.result = false
+    }
     res.json(response)
 })
