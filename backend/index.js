@@ -123,3 +123,14 @@ app.post('/api/file/upload', async (req, res) => {
     }
     res.json(response)
 })
+
+// 署名付きURL発行
+app.post('/api/file/gen', (req, res) => {
+    const response = {
+        result: true,
+    }
+
+    console.log(req.body)
+
+    res.json(response)
+})
