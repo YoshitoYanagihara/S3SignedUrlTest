@@ -30,6 +30,7 @@ export default {
             try {
                 const data = {
                     fileNum: this.fileNum,
+                    filePath: this.generateFilePath(),
                 }
                 const response = await connection.post('api/file/upload', data)
                 if (response.data.result) {
@@ -42,7 +43,19 @@ export default {
                 console.error(error)
             }
             this.fileNum = 1
-        }
+        },
+        /**
+         * ファイルパス生成
+         */
+        generateFilePath() {
+            const chars = 'ABCDEFGHIJKLMNOPQURSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+            let path = ''
+            for (let i = 0; i < 10; i++) {
+                const index = Math.floor(Math.random() * chars.length)
+                path += chars[index]
+            }
+            return path
+        },
     },
 }
 </script>
