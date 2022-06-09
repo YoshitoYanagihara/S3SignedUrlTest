@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import connection from '@/modules/ApiConnection'
 
 export default {
     name: 'UploadForm',
@@ -26,14 +26,19 @@ export default {
          */
         async onSubmit(e) {
             e.preventDefault()
-            
+
             try {
                 const data = {
                     fileNum: this.fileNum,
                 }
-                const response = await axios.post('http://localhost:3000/api/file/upload', data)
-                console.log(response)
+                const response = await connection.post('api/file/upload', data)
+                if (response.data.result) {
+                    alert('アップロードに成功しました')
+                } else {
+                    alert('アップロードに失敗しました')
+                }
             } catch (error) {
+                alert('通信エラー')
                 console.error(error)
             }
         }
