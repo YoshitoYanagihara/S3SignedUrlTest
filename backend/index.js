@@ -1,6 +1,9 @@
 // expressサーバ
 const express = require('express')
 const app = express()
+const server = app.listen(3000, () => {
+    console.log('Start Server!')
+})
 
 // AWS関係
 const AWS = require('aws-sdk')
@@ -9,9 +12,7 @@ const s3 = new AWS.S3({
     apiVersion: '2006-03-01'
 })
 
-const server = app.listen(3000, () => {
-    console.log('Start Server!')
-})
+// =========== API ==================
 
 // 動作テスト用のping
 app.get('/api/ping', (req, res) => {
