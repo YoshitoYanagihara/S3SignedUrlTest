@@ -28,3 +28,23 @@ app.get('/api/ping', (req, res) => {
         res.json(data)
     })
 })
+
+// ファイルリスト取得
+app.get('/api/file/list', (req, res) => {
+    const bucketParams = {
+        Bucket: secret.bucketName,
+    }
+    s3.listObjects(bucketParams, (err, data) => {
+        if (err) {
+            const params = {
+                error: err,
+            }
+            res.json(params)
+            return
+        }
+
+        res.json({
+            list: data.Contents,
+        })
+    })
+})
