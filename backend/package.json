@@ -9,6 +9,7 @@
   "author": "Yoshito Yanagihara",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.1151.0",
     "express": "^4.18.1"
   }
 }
