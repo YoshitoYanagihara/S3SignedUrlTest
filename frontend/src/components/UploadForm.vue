@@ -41,6 +41,7 @@ export default {
                 alert('通信エラー')
                 console.error(error)
             }
+            this.fileNum = 1
         }
     },
 }
