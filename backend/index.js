@@ -48,3 +48,14 @@ app.get('/api/file/list', (req, res) => {
         })
     })
 })
+
+// アップロード
+app.post('api/file/upload', (req, res) => {
+    const response = {
+        result: true,
+    }
+
+    console.log(req.params)
+
+    res.json(response)
+})
