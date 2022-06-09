@@ -20,6 +20,11 @@ const allowCrossDomain = function(req, res, next) {
     }
 }
 app.use(allowCrossDomain)
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
+app.use(bodyParser.json())
 
 // AWS関係
 const AWS = require('aws-sdk')
@@ -71,7 +76,7 @@ app.post('/api/file/upload', (req, res) => {
         result: true,
     }
 
-    console.log(req.params)
+    console.log(req.body)
 
     res.json(response)
 })
