@@ -1,9 +1,14 @@
 <template>
     <div class="path-list">
         <button @click="reload">リロード</button>
-        <table class="path-table">
-            <tr v-for="path in paths" :key="path">
-                <td>{{ path }}</td>
+        <table class="path-table" border="1">
+            <tr>
+                <th></th><th>パス</th><th>ファイル数</th>
+            </tr>
+            <tr v-for="item in paths" :key="item.path">
+                <td><input type="checkbox" />
+                <td>{{ item.path }}</td>
+                <td>{{ item.files }}</td>
             </tr>
         </table>
     </div>
@@ -30,7 +35,13 @@ export default {
             this.paths.splice(0)
             try {
                 const response = await connection.get('/api/file/list')
-                this.paths.push(...[response.data.list])
+                Object.keys(response.data.list).forEach(key => {
+                    const item = {
+                        path: key,
+                        files: response.data.list[key],
+                    }
+                    this.paths.push(item)
+                })
             } catch (error) {
                 alert('通信エラー')
                 console.error(error)
@@ -42,7 +53,6 @@ export default {
 
 <style scoped>
 .path-table {
-    border: 1px solid #000000;
     margin: auto;
 }
 </style>
